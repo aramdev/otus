@@ -11,8 +11,8 @@
       </p>
       <span class="badge bg-info text-dark">id: {{ id }}</span> |
       <span class="badge bg-info text-dark">price: {{ price }}</span> |
-      <span class="badge bg-info text-dark">coun: {{ rating.rate }}</span> |
-      <span class="badge bg-info text-dark">coun: {{ rating.count }}</span>
+      <span class="badge bg-info text-dark">rate: {{ rating.rate }}</span> |
+      <span class="badge bg-info text-dark">count: {{ rating.count }}</span>
       <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
     </div>
   </div>
