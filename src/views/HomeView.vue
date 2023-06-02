@@ -15,7 +15,10 @@
               @click="showProductFrom = true">
               Add new Product
             </button>
-            <button class="btn btn-outline-success me-2">Order</button>
+            <button class="btn btn-outline-success me-2"
+              @click="showOrderFrom = true">
+              Order
+            </button>
           </div>
           <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
@@ -46,20 +49,26 @@
         </div>
       </div>
     </nav>
-    <AddNewProduct v-if="showProductFrom" @close="showProductFrom = false"/>
+    <AddNewProduct v-if="showProductFrom" 
+      @close="showProductFrom = false"
+      @add-product="onAddProduct($event)"
+    />
+    <Order v-if="showOrderFrom" 
+      @close="showOrderFrom = false"
+    />
     <div class="container">
       <!-- <div class="row">
         <div class="col">
           {{ products }}
         </div>
       </div> -->
-      <div class="row">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4">
         <template v-if="proxyProducts.length > 0">
-          <div class="col-3 mb-3 mt-3" v-for="product in proxyProducts" :key="product.id">
+          <div class="col mb-3 mt-3" v-for="product in proxyProducts" :key="product.id">
             <Product v-bind="product"/>
           </div>    
         </template>
-        <div class="col mt-3" v-else>
+        <div class="col-lg-12 col-sm-12 mt-3" v-else>
           <div class="alert alert-warning" role="alert">
             По запроу товаров не найдено
           </div>
@@ -75,9 +84,11 @@ import { ref, reactive, computed, onMounted } from 'vue'
 // import TheWelcome from '../components/TheWelcome.vue'
 import api from '@/api/Fetcher.js'
 import Product from '@/components/Product.vue'
+import Order from '@/components/Order.vue'
 import AddNewProduct from '@/components/AddNewProduct.vue'
 import Search from '@/components/Search.vue'
 const showProductFrom = ref(false)
+const showOrderFrom = ref(false)
 const products = ref([])
 const filterOption = reactive({
   type: '',
@@ -98,6 +109,11 @@ const getProducts = async () => {
 const onSearch = ({ type, text }) => {
   filterOption.type = type
   filterOption.text = text
+}
+const onAddProduct = (e) => {
+  showProductFrom.value = false
+  console.log(e)
+  products.value.push(e)
 }
 const onClear = () => {
   filterOption.type = ''

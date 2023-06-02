@@ -4,60 +4,83 @@
       x
     </div>
     <h3 class="mb-2">Add new product</h3>
-    <form @submit.prevent="addNewProduct">
+    <Form  @submit="addNewProduct" v-slot="{ errors, meta }" :validation-schema="schema">
       <div class="mb-3">
         <label class="form-label">Categories</label>
-        <select class="form-select" v-model="category">
+        <Field 
+          class="form-select"
+          :class="{ 'is-invalid': errors.categoty }" 
+          name="categoty"
+          as="select">
           <option value="" selected disabled> Select category</option>
           <option :value="item" v-for="(item, i) in categories" :key="i">{{ item }}</option>
-        </select>
+        </Field>
+        <ErrorMessage class="text-danger" name="categoty" />
       </div>
       <div class="mb-3">
         <label class="form-label">Title</label>
-        <input type="text" class="form-control" v-model="title">
+        <Field class="form-control" :class="{ 'is-invalid': errors.title }" name="title" type="text" />
+        <ErrorMessage class="text-danger" name="title" />
       </div>
       <div class="mb-3">
         <label class="form-label">Price</label>
         <div class="input-group">
           <span class="input-group-text">$</span>
-          <input type="number" class="form-control" v-model.number="price">
+          <Field class="form-control" :class="{ 'is-invalid': errors.price }" name="price" type="number" />
         </div>
+        <ErrorMessage class="text-danger" name="price" />
       </div>
       <div class="mb-3">
         <label class="form-label">Image URL</label>
         <div class="input-group mb-3">
           <span class="input-group-text">https://domain.com/xx.jpg</span>
-          <input type="text" class="form-control" v-model="image">
+          <Field class="form-control" :class="{ 'is-invalid': errors.image }" name="image" type="text" />
         </div>
+        <ErrorMessage class="text-danger" name="image" />
       </div>
       <div class="mb-3">
         <label class="form-label">Description</label>
-        <textarea class="form-control" rows="3" v-model="description"></textarea>
+        <Field 
+          class="form-control" 
+          :class="{ 'is-invalid': errors.description }" 
+          name="description"
+          as="textarea"
+          row="3" />
+        <ErrorMessage class="text-danger" name="description" />
       </div>
-      <button 
+      <button
+        :disabled="!meta.valid"
         class="btn btn-success me-2"
         type="submit">
         Add Product
       </button>
-    </form>
+    </Form >
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '@/api/Fetcher.js'
-const title = ref('')
-const price = ref('')
-const description = ref('')
-const image = ref('')
+import { Form, Field, ErrorMessage  } from 'vee-validate'
+import * as yup from 'yup'
+
+const schema = yup.object({
+  categoty: yup.string().required(),
+  title: yup.string().required(),
+  price: yup.number().required(),
+  image: yup.string().required().url(),
+  description: yup.string().required()
+})
+
 const categories = ref([])
-const category = ref('')
 const getAllCategories = async () => {
   categories.value = await api.fetchApi('products/categories')
 }
-const emit = defineEmits(['close'])
-const addNewProduct = () => {
-  alert(5)
+const emit = defineEmits(['close', 'add-product'])
+const addNewProduct = async (values) => {
+  const res =  await api.fetchApi('products', 'POST', values)
+  emit('add-product', res)
+  
 }
 onMounted(() => {
   getAllCategories()
@@ -68,12 +91,15 @@ onMounted(() => {
 .addProduct
   position: fixed
   height: 100%
+  width: 600px
   background: #fff
   z-index: 9
   top: 0
   left: 0
   padding: 30px
+  overflow: auto
   box-shadow: 0 0 6px 1px rgba(0,0,0,0.3)
+  overflow: auto
 .close
   position: absolute
   top: 20px
