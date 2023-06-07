@@ -67,8 +67,8 @@ import * as yup from 'yup'
 const schema = yup.object({
   categoty: yup.string().required(),
   title: yup.string().required(),
-  price: yup.number().required(),
-  image: yup.string().required().url(),
+  price: yup.number().required().min(1),
+  image: yup.string().url(),
   description: yup.string().required()
 })
 

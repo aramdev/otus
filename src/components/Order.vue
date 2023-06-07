@@ -38,12 +38,13 @@
 <script setup>
 import { Form, Field, ErrorMessage  } from 'vee-validate'
 import * as yup from 'yup'
+const creditCardRegex = /^[0-9]{16}$/;
 
 const schema = yup.object({
   fullname: yup.string().required().min(3),
   email: yup.string().required().email(),
   address: yup.string().required(),
-  cardnumber: yup.number().required().min(16),
+  cardnumber: yup.number().required().test('creditCard', 'Card number not valid', (val) => creditCardRegex.test(val)),
 })
 
 const emit = defineEmits(['close'])
