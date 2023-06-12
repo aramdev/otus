@@ -13,7 +13,7 @@
       :value="product.quantity" 
       @input="onChangeQuantity($event)">
     <span>
-      Sum: {{ info.price * product.quantity }}
+      Sum: {{ (info.price * product.quantity).toFixed(2) }}
     </span>
     <button type="button" 
       class="btn-close btn-danger" aria-label="Close"

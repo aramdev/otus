@@ -16,6 +16,7 @@ export function useSum () {
       const quantity = el.quantity
       sum += (price * quantity)
     })
+    sum = sum.toFixed(2)
     return sum
   })
   return { sum }

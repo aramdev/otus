@@ -18,7 +18,8 @@
                 </RouterLink>
               </li>
             </ul>
-            <strong class="user" v-if="user">{{ fullName }}</strong>
+            <strong class="user me-3" v-if="user">{{ fullName }}</strong>
+            <button class="btn btn-success btn-sm" @click="logout()">logout</button>
           </div>
         </div>
       </div>
@@ -36,6 +37,10 @@ const useUser = useUserStore()
 const { fullName, user } = storeToRefs(useUser)
 const useCart = useCartsStore()
 const { count } = storeToRefs(useCart)
+const logout = () => {
+  localStorage.clear()
+  location.reload()
+}
 </script>
 
 <style lang="sass">
