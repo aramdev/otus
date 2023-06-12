@@ -1,70 +1,53 @@
 <template>
   <main>
-    <AddNewProduct v-if="showProductFrom" 
-      @close="showProductFrom = false"
-      @add-product="onAddProduct($event)"
-    />
-    <Order v-if="showOrderFrom" 
+    <!-- <Order v-if="showOrderFrom" 
       @close="showOrderFrom = false"
-    />
+    /> -->
     <div class="container">
-      <!-- <div class="row">
-        <div class="col">
-          {{ products }}
+      <div class="row">
+        <div class="col-9 mt-3">
+          <Search />
         </div>
-      </div> -->
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4">
-        <template v-if="proxyProducts.length > 0">
-          <div class="col mb-3 mt-3" v-for="product in proxyProducts" :key="product.id">
-            <Product v-bind="product"/>
+        <div class="col-3 mt-3 d-flex justify-content-end">
+          <router-link :to="{name: 'addNewProduct'}" class="btn btn-success">Add new product</router-link>
+        </div>
+      </div>
+      <div class="row" v-if="products.length == 0">
+        <div class="col">
+          <loader />
+        </div>
+      </div>
+      <div class="row row-cols-1 row-cols-sm-1 row-cols-lg-2" v-else>
+        <template v-if="productsByFilter.length > 0">
+          <div class="col mb-3 mt-3" v-for="product in productsByFilter" :key="product.id">
+            <Product v-bind="product">
+              <template #link="{ toProduct }">
+                <router-link :to="toProduct" class="btn btn-primary">Go product</router-link> |
+              </template>
+            </Product>
           </div>    
         </template>
         <div class="col-lg-12 col-sm-12 mt-3" v-else>
           <div class="alert alert-warning" role="alert">
-            По запроу товаров не найдено
+            No products found by request
           </div>
         </div>
       </div>
     </div>
-    <!-- <TheWelcome /> -->
   </main>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
-// import TheWelcome from '../components/TheWelcome.vue'
-import api from '@/api/Fetcher.js'
+import { ref, onMounted } from 'vue'
+import { RouterLink } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import Product from '@/components/Product.vue'
-import Order from '@/components/Order.vue'
-import AddNewProduct from '@/components/AddNewProduct.vue'
-const props = defineProps({
-  filterOption: {
-    type: Object,
-    required: true
-  }
-})
-const showProductFrom = ref(false)
-const showOrderFrom = ref(false)
-const products = ref([])
-const proxyProducts = computed(() => {
-  if (props.filterOption.type === '') {
-    return products.value
-  }
-  return products.value.filter(item => {
-    const value = item[props.filterOption.type].toString().toLowerCase() || ''
-    return value.includes(props.filterOption.text) ? item : ''
-  })
-})
-const getProducts = async () => {
-  products.value = await api.fetchApi('products')
-}
-const onAddProduct = (e) => {
-  showProductFrom.value = false
-  console.log(e)
-  products.value.push(e)
-}
-
-onMounted(() => {
-  getProducts()
-})
+import Search from '@/components/Search.vue'
+import Loader from '@/components/Loader.vue'
+import { useProductsStore } from '@/stores/products.js'
+const useProducts = useProductsStore()
+const { products, productsByFilter } = storeToRefs(useProducts)
+// const products = computed(() => useProducts.products)
+// import Order from '@/components/Order.vue'
+// const showOrderFrom = ref(false)
 </script>

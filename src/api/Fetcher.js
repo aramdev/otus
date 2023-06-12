@@ -1,10 +1,10 @@
 const baseUrl = 'https://fakestoreapi.com'
-// const token = JSON.parse(localStorage.getItem('token')) || '1234'
+// const token = localStorage.getItem('token') || ''
 export default {
   async fetchApi (url, method = 'GET', data) {
     const headers = {
       'Content-Type': 'application/json;charset=UTF-8',
-      //Authorization: `Bearer ${token}`
+      // Authorization: `Bearer ${token}`
     }
     const body = JSON.stringify(data)
     const response = await fetch(`${baseUrl}/${url}`, {
