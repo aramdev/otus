@@ -28,6 +28,12 @@ const router = createRouter({
       meta: { layout: 'default', auth: true}
     },
     {
+      path: '/order',
+      name: 'order',
+      component: () => import('@/views/Order.vue'),
+      meta: { layout: 'default', auth: true}
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('@/views/Login.vue'),
