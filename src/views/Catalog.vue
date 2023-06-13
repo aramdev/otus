@@ -1,8 +1,5 @@
 <template>
   <main>
-    <!-- <Order v-if="showOrderFrom" 
-      @close="showOrderFrom = false"
-    /> -->
     <div class="container">
       <div class="row">
         <div class="col-9 mt-3">
