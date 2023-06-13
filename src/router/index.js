@@ -19,7 +19,7 @@ const router = createRouter({
       path: '/add-new-product',
       name: 'addNewProduct',
       component: () => import('@/views/AddNewProduct.vue'),
-      meta: { layout: 'default', auth: true, role: 'admin'},
+      meta: { layout: 'default', auth: true },
       beforeEnter: (to, from, next) => {
         const role = localStorage.getItem('role')
         if (role == 'admin') {
