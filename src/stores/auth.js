@@ -4,8 +4,12 @@ export const useAuthStore = defineStore('Auth', () => {
   const login = async ({ username, password }) => {
     const res = await api.fetchApi('users')
     const user = res.find(user => user.username == username && user.password == password)
-    localStorage.setItem('userid', user.id)
-    location.reload()
+    if (user) {
+      localStorage.setItem('userid', user.id)
+      location.reload()
+      return
+    }
+    throw 'login or password is invalid'
   }
   return { login }
 })

@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <div class="content">
+      <div class="alert alert-danger" v-if="errorShow">login or password is invalid</div>
       <Form  @submit="onLogin" v-slot="{ errors, meta }" :validation-schema="schema" class="form">
         <h3>Login</h3>
         <div class="mb-3">
@@ -17,7 +18,7 @@
           {{ users }}
         </pre> -->
         <button
-          :disabled="!meta.valid"
+          :disabled="!meta.valid || disabled"
           class="btn btn-success me-2"
           type="submit">
           Login
@@ -49,25 +50,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"
 import { useAuthStore } from '@/stores/auth.js'
 import { Form, Field, ErrorMessage  } from 'vee-validate'
-import api from '@/api/Fetcher.js'
+import { ref } from 'vue'
 import * as yup from 'yup'
 const schema = yup.object({
   username: yup.string().required(),
   password: yup.string().required().min(6),
 })
-const users = ref([])
 const useAuth = useAuthStore()
+const errorShow = ref(false)
+const disabled = ref(false)
 const { login } = useAuth
-const onLogin = (value) => {
-  console.log(value)
-  login(value)
+const onLogin = async (value) => {
+  try {
+    errorShow.value = false
+    disabled.value = true
+    await login(value)
+  } catch (e) {
+    errorShow.value = true
+    disabled.value = false
+  }
 }
-onMounted(async () => {
-  users.value = await api.fetchApi('users')
-})
 </script>
 
 <style lang="sass">

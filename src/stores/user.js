@@ -8,7 +8,11 @@ export const useUserStore = defineStore('User', () => {
   })
   const getUser = async () => {
     const id = localStorage.getItem('userid', user.id)
-    user.value = await api.fetchApi(`users/${id}`)
+    try {
+      user.value = await api.fetchApi(`users/${id}`)
+    } catch (e) {
+      console.log(e.message)
+    }
   }
   return { getUser, fullName, user }
 })

@@ -6,7 +6,6 @@
           <h3 class="mb-2">Add new product</h3>
           <Form  @submit="onSubmitProduct" v-slot="{ errors, meta }" :validation-schema="schema">
             <div class="row">
-
               <div class="col-12 col-lg-6 mb-3">
                 <label class="form-label">Categories</label>
                 <Field 
@@ -114,7 +113,4 @@ onMounted( async () => {
 </script>
 
 <style lang="sass" scoped>
-.addProduct
-
-  
 </style>

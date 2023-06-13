@@ -55,7 +55,7 @@
                 <ErrorMessage class="text-danger" name="street" />
               </div>
               <div class="col-12 col-lg-4 mb-3">
-                <label class="form-label">App Number</label>
+                <label class="form-label">Building Number</label>
                 <Field class="form-control" 
                   :class="{ 'is-invalid': errors.number }" 
                   :value="user.address.number"
@@ -103,7 +103,7 @@ const schema = yup.object({
   phone: yup.string().required(),
   city: yup.string().required(),
   street: yup.string().required(),
-  number: yup.number().required()
+  number: yup.number().required().min(0)
 })
 const useUser = useUserStore()
 const { user } = storeToRefs(useUser)
