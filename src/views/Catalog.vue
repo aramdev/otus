@@ -8,7 +8,7 @@
         <div class="col-9 mt-3">
           <Search />
         </div>
-        <div class="col-3 mt-3 d-flex justify-content-end">
+        <div class="col-3 mt-3 d-flex justify-content-end" v-if="role == 'admin'">
           <router-link :to="{name: 'addNewProduct'}" class="btn btn-success">Add new product</router-link>
         </div>
       </div>
@@ -48,6 +48,5 @@ import { useProductsStore } from '@/stores/products.js'
 const useProducts = useProductsStore()
 const { products, productsByFilter } = storeToRefs(useProducts)
 // const products = computed(() => useProducts.products)
-// import Order from '@/components/Order.vue'
-// const showOrderFrom = ref(false)
+const role = ref(localStorage.getItem('role'))
 </script>

@@ -96,11 +96,12 @@ import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { useSum } from '@/hooks/sum.js'
 import { useCartsStore } from '@/stores/carts.js'
+const phoneRegex = /^\+?[0-9- ]+$/
 const schema = yup.object({
   firstname: yup.string().required().min(2),
   lastname: yup.string().required().min(2),
   email: yup.string().required().email(),
-  phone: yup.string().required(),
+  phone: yup.string().required().test('phone', 'Phone is not valid', (val) => phoneRegex.test(val)),
   city: yup.string().required(),
   street: yup.string().required(),
   number: yup.number().required().min(0)

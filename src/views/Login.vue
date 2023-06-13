@@ -14,9 +14,12 @@
           <Field class="form-control" :class="{ 'is-invalid': errors.password }" name="password" type="password" />
           <ErrorMessage class="text-danger" name="password" />
         </div>
-        <!-- <pre>
-          {{ users }}
-        </pre> -->
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" v-model="role" id="flexCheckDefault">
+          <label class="form-check-label" for="flexCheckDefault">
+            Login as admin
+          </label>
+        </div>
         <button
           :disabled="!meta.valid || disabled"
           class="btn btn-success me-2"
@@ -61,12 +64,16 @@ const schema = yup.object({
 const useAuth = useAuthStore()
 const errorShow = ref(false)
 const disabled = ref(false)
+const role = ref(false)
 const { login } = useAuth
 const onLogin = async (value) => {
   try {
     errorShow.value = false
     disabled.value = true
     await login(value)
+    if (role.value) {
+      localStorage.setItem('role', 'admin')
+    }
   } catch (e) {
     errorShow.value = true
     disabled.value = false
